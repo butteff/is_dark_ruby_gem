@@ -1,3 +1,4 @@
+require "rmagick"
 class IsDark
 	@r = false
 	@g = false
