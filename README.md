@@ -7,7 +7,7 @@ Ruby Gem to detect a dark color based on [luminance w3 standarts]( https://www.w
 * is an Imagick pixel from a blob dark
 *  is an area in a blob over a dark background (uses Imagick for it too).
 
-####How to use:
+#### How to use:
 1. Declare a lib:
 `require 'is_dark'`
 
@@ -20,8 +20,10 @@ Ruby Gem to detect a dark color based on [luminance w3 standarts]( https://www.w
 3. is Imagick pixel from a blob dark by coordinates:
 `IsDark.magick_pixel_from_blob(x, y, blob)`
 
-4. is Imagick area from a blob dark (by coordinates of a dot + width and height from the dot) [it takes few more pixels in the area to have an analitics]
+4. is Imagick area from a blob dark (by coordinates of a dot + width and height from the dot)
+   it takes few more pixels in the area to have an analitics
+   
 `IsDark.magick_area_from_blob(x, y, blob, height, width)`
 
-where height is from top (y) to down
+where height is from top (y) to down; 
 width is from left (x) to right
