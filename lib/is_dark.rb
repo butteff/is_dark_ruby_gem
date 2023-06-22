@@ -1,8 +1,8 @@
 require "rmagick"
 class IsDark
-	@r = false
-	@g = false
-	@b = false
+	@r = 0
+	@g = 0
+	@b = 0
 	@colorset = 255
 
 	def self.color(hex)
@@ -40,7 +40,7 @@ class IsDark
 
 	private
 
-	def self.is_dark
+	def self.is_dark #detects a dark color based on luminance W3 standarts ( https://www.w3.org/TR/WCAG20/#relativeluminancedef )
 		dark = false
 		pixel = [@r.to_f, @g.to_f, @b.to_f]
 		calculated = []
