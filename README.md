@@ -12,10 +12,10 @@ An example practical aspect: it can be useful to understand will a black colored
 #### How to Install:
 
 Gemfile: 
-gem 'is_dark', '~> 0.0.3'
+`gem 'is_dark', '~> 0.0.3'`
 
 Install: 
-gem install is_dark
+`gem install is_dark`
 
 #### How to use:
 1. Declare a lib:
