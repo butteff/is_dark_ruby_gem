@@ -7,6 +7,16 @@ Ruby Gem to detect a dark color based on [luminance w3 standarts]( https://www.w
 * is an Imagick pixel from a blob dark
 *  is an area in a blob over a dark background (uses Imagick for it too).
 
+An example practical aspect: it can be useful to understand will a black colored text be visible or not over an area.
+
+#### How to Install:
+
+Gemfile: 
+gem 'is_dark', '~> 0.0.3'
+
+Install: 
+gem install is_dark
+
 #### How to use:
 1. Declare a lib:
 `require 'is_dark'`
