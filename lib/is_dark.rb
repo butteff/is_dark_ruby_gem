@@ -23,9 +23,9 @@ class IsDark
       	self.magick_pixel(pix)
 	end
 
-	def self.magick_area_from_blob(x, y, blob, height, width)
+	def self.magick_area_from_blob(x, y, blob, height, width) # (x, y) is the left corner of an element over a blob, height and width is the element's size
 	    image = Magick::Image.read(blob).first
-	    dots = [{'x': x, 'y': y}, {'x': x+width, 'y': y}, {'x': x+width, 'y': y-height}, {'x': x, 'y': y-height}, {'x': (x+width)/2, 'y': (y-height)/2}]
+	    dots = [{'x': x, 'y': y}, {'x': x+width, 'y': y}, {'x': x+width, 'y': y-height}, {'x': x, 'y': y-height}, {'x': (x+width)/2, 'y': (y-height)/2}, {'x': (x + width)/4, 'y': (y-height)/2}, {'x': (x + width)/2, 'y': (y-height)/4}, {'x': (x + width)/2, 'y': ((y-height)/4)*3}, {'x': ((x + width)/4)*3, 'y': (y-height)/2}]
 	    points = 0
 	    dots.each { |dot|
 	      x = dot[:x]
@@ -34,7 +34,7 @@ class IsDark
 	      l = self.magick_pixel(pix)
 	      points += 1 if l
 	    }
-	    dark = true if points >= 3
+	    dark = true if points >= 6
 	    dark
   	end
 
