@@ -117,11 +117,16 @@ class IsDark
     calculated = []
     pixel.each do |color|
       color /= @colorset
-      color /= LOW_LUMINANCE_DIVIDER if color <= LINEAR_LUMINANCE_THRESHOLD
-      color = ((color + NONLINEAR_TRANSFORM_OFFSET) / NONLINEAR_TRANSFORM_DIVIDER)**HIGH_LUMINANCE_POWER if color > LINEAR_LUMINANCE_THRESHOLD
+      if color <= LINEAR_LUMINANCE_THRESHOLD
+        color /= LOW_LUMINANCE_DIVIDER
+      else
+        color = ((color + NONLINEAR_TRANSFORM_OFFSET) / NONLINEAR_TRANSFORM_DIVIDER)**HIGH_LUMINANCE_POWER
+      end
       calculated << color
     end
-    l = (RED_LUMINANCE_COEFFICIENT * calculated[0] + GREEN_LUMINANCE_COEFFICIENT * calculated[1] + BLUE_LUMINANCE_COEFFICIENT * calculated[2])
+    l = RED_LUMINANCE_COEFFICIENT * calculated[0] +
+        GREEN_LUMINANCE_COEFFICIENT * calculated[1] +
+        BLUE_LUMINANCE_COEFFICIENT * calculated[2]
     dark = true if l <= LUMINANCE_THRESHOLD
     if @with_debug
       debug = { 'X': x, 'Y': y, 'R': @r, 'G': @g, 'B': @b, 'luminance value': l, 'is_dark': dark,
