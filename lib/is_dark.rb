@@ -2,17 +2,31 @@
 
 require 'rmagick'
 class IsDark
+  BLUE_LUMINANCE_COEFFICIENT = 0.0722
+  GREEN_LUMINANCE_COEFFICIENT = 0.7152
+  HIGH_LUMINANCE_DIVIDER = 1.055
+  HIGH_LUMINANCE_POWER = 2.4
+  LOW_LUMINANCE_DIVIDER = 12.92
+  LUMINANCE_THRESHOLD = 0.05
+  MAXIMUM_COLOR_DEPTH = 255
+  MAX_COLOR_VALUE_MULTIPLIER = 655
+  MAX_COLOR_VALUE = MAX_COLOR_VALUE_MULTIPLIER * MAXIMUM_COLOR_DEPTH
+  LINEAR_LUMINANCE_THRESHOLD = (1 / (LOW_LUMINANCE_DIVIDER * 100.0)) * MAXIMUM_COLOR_DEPTH
+  NONLINEAR_TRANSFORM_DIVIDER = 1.055
+  NONLINEAR_TRANSFORM_OFFSET = 0.055
+  RED_LUMINANCE_COEFFICIENT = 0.2126
+
   @r = 0
   @g = 0
   @b = 0
-  @colorset = 255
+  @colorset = MAXIMUM_COLOR_DEPTH
   @with_debug = false
   @with_debug_file = false
   @debug_file_path = '/tmp/is_dark_debug_file.pdf'
 
   def self.color(hex)
     @r, @g, @b = hex.match(/^#(..)(..)(..)$/).captures.map(&:hex)
-    @colorset = 255
+    @colorset = MAXIMUM_COLOR_DEPTH
     is_dark
   end
 
@@ -20,7 +34,7 @@ class IsDark
     @r = pix.red.to_f
     @g = pix.green.to_f
     @b = pix.blue.to_f
-    @colorset = 655 * 255
+    @colorset = MAX_COLOR_VALUE
     is_dark(x, y, set_not_detected_light)
   end
 
@@ -95,19 +109,25 @@ class IsDark
     dark = false
     inverted = false
     pixel = [@r.to_f, @g.to_f, @b.to_f]
-    if set_not_detected_light && pixel[0] == 0.0 && pixel[1] == 0.0 && pixel[2] == 0.0 # probably not detected pixel color by Imagick, will be considered as "white" if "set_not_detected_light = true"
-      pixel = [65_535.0, 65_535.0, 65_535.0]
+    # probably not detected pixel color by Imagick, will be considered as "white" if "set_not_detected_light = true"
+    if set_not_detected_light && pixel[0] == 0.0 && pixel[1] == 0.0 && pixel[2] == 0.0
+      pixel = [MAXIMUM_COLOR_DEPTH, MAXIMUM_COLOR_DEPTH, MAXIMUM_COLOR_DEPTH]
       inverted = true
     end
     calculated = []
     pixel.each do |color|
       color /= @colorset
-      color /= 12.92 if color <= 0.03928
-      color = ((color + 0.055) / 1.055)**2.4 if color > 0.03928
+      if color <= LINEAR_LUMINANCE_THRESHOLD
+        color /= LOW_LUMINANCE_DIVIDER
+      else
+        color = ((color + NONLINEAR_TRANSFORM_OFFSET) / NONLINEAR_TRANSFORM_DIVIDER)**HIGH_LUMINANCE_POWER
+      end
       calculated << color
     end
-    l = (0.2126 * calculated[0] + 0.7152 * calculated[1] + 0.0722 * calculated[2])
-    dark = true if l <= 0.05
+    l = RED_LUMINANCE_COEFFICIENT * calculated[0] +
+        GREEN_LUMINANCE_COEFFICIENT * calculated[1] +
+        BLUE_LUMINANCE_COEFFICIENT * calculated[2]
+    dark = true if l <= LUMINANCE_THRESHOLD
     if @with_debug
       debug = { 'X': x, 'Y': y, 'R': @r, 'G': @g, 'B': @b, 'luminance value': l, 'is_dark': dark,
                 'inverted to white': inverted }
