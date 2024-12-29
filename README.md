@@ -1,6 +1,8 @@
 # is_dark Ruby Gem
 Ruby Gem to detect a dark color based on [luminance w3 standarts]( https://www.w3.org/TR/WCAG20/#relativeluminancedef "luminance w3 standarts") 
 
+https://github.com/user-attachments/assets/b5c46ae5-b608-4588-a497-b3bd3eb690ef
+
 #### Can detect: 
 * is a hex color dark
 * is an Imagick pixel dark
@@ -51,4 +53,4 @@ Sometimes Imagick can't detect a pixel or it has no color, so it detects it as (
 
 - `cd spec && rspec test_is_dark.rb` #rspec tests with a generated debug file
 
-- `rake test` #minitest based unit tests (low amount of tests) 
+- `rake test` #minitest based unit tests (low amount of tests)
