@@ -76,12 +76,13 @@ class IsDark
     end
     dark = true if points >= (dots.length / 100) * percent
     if @with_debug
-      p '===================================================================='
+      p '=================================================================================='
       p "Total Points: #{dots.length}, dark points amount:#{points}"
       p "Is \"invert to white not detectd pixels\" option enabled?:#{set_not_detected_light}"
       p "Signature will be inverted if #{percent}% of dots will be dark"
       p "Is inverted?: #{dark}"
-      p '===================================================================='
+      p "have a look on #{@debug_file_path} file to see your tested area of a blob"
+      p '=================================================================================='
     end
     dark
   end

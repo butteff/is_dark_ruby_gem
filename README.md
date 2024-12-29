@@ -46,3 +46,9 @@ It also has kind of a development mode, when you can generate a debug outputs of
 Sometimes Imagick can't detect a pixel or it has no color, so it detects it as (RGB: 0,0,0), the gem has an option to consider pixels like this as "white", but if you need to disable this option add true or false at the end of the method:
 
 -  ` IsDark.magick_area_from_blob(x, y, blob, cf_height, cf_width, 60, (1..10), false)` #detection "as white" is disabled)
+
+#### Unit Tests:
+
+- `cd spec && rspec test_is_dark.rb` #rspec tests with a generated debug file
+
+- `rake test` #minitest based unit tests (low amount of tests) 
