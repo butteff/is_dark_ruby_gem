@@ -1,7 +1,5 @@
 # is_dark Ruby Gem
-Ruby Gem to detect a dark color over an area from a blob of a file or by a color hex code based on [luminance w3 standarts]( https://www.w3.org/TR/WCAG20/#relativeluminancedef "luminance w3 standarts") 
-
-https://github.com/user-attachments/assets/b5c46ae5-b608-4588-a497-b3bd3eb690ef
+Ruby Gem to detect a dark color based on [luminance w3 standarts]( https://www.w3.org/TR/WCAG20/#relativeluminancedef "luminance w3 standarts")
 
 #### Can detect: 
 * is a hex color dark
