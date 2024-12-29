@@ -1,28 +1,28 @@
-require "rspec"
 require "rmagick"
-require "../lib/is_dark.rb"
+require 'spec_helper'
+require_relative '../../lib/is_dark'
 
-TEST_FILE_PATH = '../color_card.pdf'
+TEST_FILE_PATH = 'color_card.pdf'
 
 describe IsDark do
-  
+
   describe ".color" do
     context "dark colors tests" do
       it "this color #000000 is dark, returns true" do
         expect(IsDark.color('#000000')).to eq(true)
       end
-   
+
       it "this color #111111 is dark, returns true" do
         expect(IsDark.color('#111111')).to eq(true)
       end
 
       it "this color #102694 is dark, returns true" do
         expect(IsDark.color('#102694')).to eq(true)
-      end 
+      end
 
       it "this color #ff2e17 is dark, returns true" do
         expect(IsDark.color('#800f03')).to eq(true)
-      end 
+      end
     end
 
     context "not dark colors tests" do
@@ -50,15 +50,15 @@ describe IsDark do
         x = 120
         y = 120
         expect(IsDark.magick_pixel_from_blob(x, y, TEST_FILE_PATH)).to eq(true)
-      end 
-    end 
+      end
+    end
 
     context "test not dark pixel" do
       it "this pixel is not dark, returns false" do
         x = 720
         y = 120
         expect(IsDark.magick_pixel_from_blob(x, y, TEST_FILE_PATH)).to eq(false)
-      end 
+      end
     end
   end
 
@@ -68,22 +68,22 @@ describe IsDark do
         image = Magick::Image.read(TEST_FILE_PATH).first
         pix = image.pixel_color(80, 320)
         expect(IsDark.magick_pixel(pix)).to eq(true)
-      end 
-    end 
+      end
+    end
 
     context "test not dark pixel" do
       it "this pixel is not dark, returns false" do
         image = Magick::Image.read(TEST_FILE_PATH).first
         pix = image.pixel_color(720, 120)
         expect(IsDark.magick_pixel(pix)).to eq(false)
-      end 
+      end
     end
   end
 
   describe ".magick_area_from_blob" do
     context "test dark area" do
       it "this area is dark, returns true" do
-        x = 120 #coordinate of a left corner of the area's rectangle X 
+        x = 120 #coordinate of a left corner of the area's rectangle X
         y = 120 #coordinate of a left corner of the area's rectangle Y
         cf_height = 64 #height of the area's rectangle
         cf_width = 128 #height of the area's rectangle
@@ -91,12 +91,12 @@ describe IsDark do
         matrix = (1..10) #matrix of dots. Range of matrix to build dots 1..10 - means 10x10
         with_not_detected = false #Sometimes Imagick can't detect a pixel or it has no color, so it detects it as (RGB: 0,0,0), the gem has an option to consider pixels like this as "white", but if you need to disable this option add true or false
         expect(IsDark.magick_area_from_blob(x, y, TEST_FILE_PATH, cf_height, cf_width, percent, matrix, with_not_detected)).to eq(false)
-      end 
-    end 
+      end
+    end
 
     context "test bright area" do
       it "this area is not dark, returns false" do
-        x = 720 #coordinate of a left corner of the area's rectangle X 
+        x = 720 #coordinate of a left corner of the area's rectangle X
         y = 120 #coordinate of a left corner of the area's rectangle Y
         cf_height = 64 #height of the area's rectangle
         cf_width = 128 #height of the area's rectangle
@@ -104,12 +104,12 @@ describe IsDark do
         matrix = (1..10) #matrix of dots. Range of matrix to build dots 1..10 - means 10x10
         with_not_detected = false #Sometimes Imagick can't detect a pixel or it has no color, so it detects it as (RGB: 0,0,0), the gem has an option to consider pixels like this as "white", but if you need to disable this option add true or false
         expect(IsDark.magick_area_from_blob(x, y, TEST_FILE_PATH, cf_height, cf_width, percent, matrix, with_not_detected)).to eq(false)
-      end 
-    end 
+      end
+    end
 
     context "test debug output" do
       it "test area with logs and debug file" do
-        x = 120 #coordinate of a left corner of the area's rectangle X 
+        x = 120 #coordinate of a left corner of the area's rectangle X
         y = 120 #coordinate of a left corner of the area's rectangle Y
         cf_height = 64 #height of the area's rectangle
         cf_width = 128 #height of the area's rectangle
@@ -118,8 +118,8 @@ describe IsDark do
         with_not_detected = false #Sometimes Imagick can't detect a pixel or it has no color, so it detects it as (RGB: 0,0,0), the gem has an option to consider pixels like this as "white", but if you need to disable this option add true or false
         IsDark.set_debug_data(true, './is_dark_debug_output.pdf')
         expect(IsDark.magick_area_from_blob(x, y, TEST_FILE_PATH, cf_height, cf_width, percent, matrix, with_not_detected)).to eq(false)
-      end 
-    end 
+      end
+    end
   end
 
 end
