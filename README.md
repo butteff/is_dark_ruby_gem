@@ -14,7 +14,7 @@ An example practical aspect: it can be useful to understand will a black colored
 #### How to Install:
 
 Gemfile: 
-`gem 'is_dark', '~> 0.0.3'`
+`gem 'is_dark', '~> 0.1.7'`
 
 Install: 
 `gem install is_dark`
@@ -51,6 +51,6 @@ Sometimes Imagick can't detect a pixel or it has no color, so it detects it as (
 
 #### Unit Tests:
 
-- `cd spec && rspec test_is_dark.rb` #rspec tests with a generated debug file
+- `rspec` #rspec tests with a generated debug file
 
 - `rake test` #minitest based unit tests (low amount of tests)
