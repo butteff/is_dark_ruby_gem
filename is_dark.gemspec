@@ -16,4 +16,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'rmagick', '~> 5.2'
   s.add_development_dependency 'minitest', '~> 5.16'
   s.add_development_dependency 'rspec', '~> 3.13'
+  s.add_development_dependency 'rubocop', '~> 1.69'
 end
