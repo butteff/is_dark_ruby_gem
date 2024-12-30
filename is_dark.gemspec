@@ -12,5 +12,6 @@ Gem::Specification.new do |s|
   s.metadata    = { "source_code_uri" => "https://github.com/butteff/is_dark_ruby_gem" }
   s.required_ruby_version = '>= 2.7.0'
   s.add_dependency 'rmagick', '~> 5.2'
-  #s.add_development_dependency 'rmagick', '~> 5.2'
+  s.add_development_dependency 'rspec', "~> 3.13"
+  s.add_development_dependency 'minitest', "~> 5.16"
 end
