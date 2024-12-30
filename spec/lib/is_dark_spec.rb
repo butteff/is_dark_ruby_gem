@@ -90,7 +90,9 @@ describe IsDark do
         cf_width = 128 # height of the area's rectangle
         percent = 70 # percent of detected dark pixels to invert
         matrix = (1..10) # matrix of dots. Range of matrix to build dots 1..10 - means 10x10
-        with_not_detected = false # Sometimes Imagick can't detect a pixel or it has no color, so it detects it as (RGB: 0,0,0), the gem has an option to consider pixels like this as "white", but if you need to disable this option add true or false
+        # Sometimes Imagick can't detect a pixel or it has no color, so it detects it as (RGB: 0,0,0), the gem has an
+        # option to consider pixels like this as "white", but if you need to disable this option add true or false.
+        with_not_detected = false
         expect(IsDark.magick_area_from_blob(x, y, TEST_FILE_PATH, cf_height, cf_width, percent, matrix,
                                             with_not_detected)).to eq(false)
       end
@@ -104,7 +106,9 @@ describe IsDark do
         cf_width = 128 # height of the area's rectangle
         percent = 70 # percent of detected dark pixels to invert
         matrix = (1..10) # matrix of dots. Range of matrix to build dots 1..10 - means 10x10
-        with_not_detected = false # Sometimes Imagick can't detect a pixel or it has no color, so it detects it as (RGB: 0,0,0), the gem has an option to consider pixels like this as "white", but if you need to disable this option add true or false
+        # Sometimes Imagick can't detect a pixel or it has no color, so it detects it as (RGB: 0,0,0), the gem has
+        # an option to consider pixels like this as "white", but if you need to disable this option add true or false.
+        with_not_detected = false
         expect(IsDark.magick_area_from_blob(x, y, TEST_FILE_PATH, cf_height, cf_width, percent, matrix,
                                             with_not_detected)).to eq(false)
       end
@@ -118,7 +122,9 @@ describe IsDark do
         cf_width = 128 # height of the area's rectangle
         percent = 70 # percent of detected dark pixels to invert
         matrix = (1..10) # matrix of dots. Range of matrix to build dots 1..10 - means 10x10
-        with_not_detected = false # Sometimes Imagick can't detect a pixel or it has no color, so it detects it as (RGB: 0,0,0), the gem has an option to consider pixels like this as "white", but if you need to disable this option add true or false
+        # Sometimes Imagick can't detect a pixel or it has no color, so it detects it as (RGB: 0,0,0), the gem has
+        # an option to consider pixels like this as "white", but if you need to disable this option add true or false.
+        with_not_detected = false
         IsDark.set_debug_data(true, './is_dark_debug_output.pdf')
         expect(IsDark.magick_area_from_blob(x, y, TEST_FILE_PATH, cf_height, cf_width, percent, matrix,
                                             with_not_detected)).to eq(false)
