@@ -5,5 +5,6 @@ gem "rmagick"
 
 group  :development, :test do
   gem "rspec"
+  gem "rubocop", require: false
   gem "minitest"
 end
