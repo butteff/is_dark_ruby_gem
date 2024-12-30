@@ -14,7 +14,7 @@ An example practical aspect: it can be useful to understand will a black colored
 #### How to Install:
 
 Gemfile: 
-`gem 'is_dark', '~> 0.1.9'`
+`gem 'is_dark', '~> 0.2.0'`
 
 Install: 
 `gem install is_dark`
@@ -23,36 +23,51 @@ Install:
 1. Declare a lib:
 `require 'is_dark'`
 
+2. Make an instance:
+`is_dark = IsDark.new`
+
 2. Is Hex color dark:
-`IsDark.color('#ffffff') => false`
+`is_dark.color('#ffffff')` => false
 
 3. is Imagick pixel dark:
-`IsDark.magick_pixel(pix)`
+`is_dark.magick_pixel(pix)`
 
 4. is Imagick pixel from a blob dark by coordinates:
-`IsDark.magick_pixel_from_blob(x, y, blob)`
+`is_dark.magick_pixel_from_blob(x, y, blob)`
 
 5. is Imagick area from a blob dark (by coordinates of a dot + width and height from the dot):
-`IsDark.magick_area_from_blob(x, y, blob, height, width)` #standart default settings
+`is_dark.magick_area_from_blob(x, y, blob, height, width)` #standart default settings
 
 #### Settings:
-It also has kind of a development mode, when you can generate a debug outputs of all the generated dots based on provided coordinates. It can draw a test area over the file if you want, so you always can be sure, that you have valid coordinates on your tests. You can also set some other values and calibrate results as you need.
+It also has kind of a development mode, when you can generate a debug outputs of all the generated dots based on provided coordinates. It can draw a test area over the file if you want, so you always can be sure, that you have valid coordinates during your tests. You can also set some other values and calibrate results as you need. You can just initialize an instance with these settings or update an existed one:
 
 ```ruby
-IsDark.configure({
+params = {
     percent: 70, #percent of dark dots under an area to mark all the area as dark
     matrix: (0..10), #range of dots to analyse. (0..10) means matrix 10x10 or 100 dots to analyse
     with_not_detected_as_white: true, # Sometimes Imagick can't detect a pixel or it has no color, so it detects it as (RGB: 0,0,0), the gem has an option to consider pixels like this as "white", but if you need to disable this option add true or false
     with_debug: true, #show debug output
     with_debug_file: true, #draw a tested area in a copy of your blob file
-    debug_file_path: debug_file_path #path of the file with a drawn area
-})
+    debug_file_path: debug_file_path, #path of the file with a drawn area
+    luminance: 0.05 # all pixels are dark if their luminance is lower, that this value
+}
+is_dark = IsDark.new(params) #to generate new Instance
+#or
+is_dark.configure(params) #to update existed instance
+
 ```
+
 You can use these settings and test it after with this command:
-`IsDark.magick_area_from_blob(x, y, blob, height, width)`, so it will show a debug info with a generated file
+`is_dark.magick_area_from_blob(x, y, blob, height, width)`, so it will show a debug info with a generated file like in the video at the top of this documentation.
+
+###### Deep Settings:
+
+You can calibrate it more deep, change constants for it inside lib/is_dark.rb file, but the most powerful parameter to calibrate in case of a not valid dark area detection is about luminance value, it is open to change this value from settings params, it is already described in the message above.
 
 #### Unit Tests:
 
-- `rspec` #rspec tests with a generated debug file
+- run `rspec` command to run tests with a generated debug file
 
-- `rake test` #minitest based unit tests (low amount of tests)
+#### Old versions:
+
+Old versions of the gem are about static methods only, you can find old documentation about it all in [README_old.md file]( https://github.com/butteff/is_dark_ruby_gem/blob/main/README_old.md "README_old.md file")

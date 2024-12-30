@@ -36,27 +36,33 @@ class IsDark
   @colorset = MAXIMUM_COLOR_DEPTH
   @percent = DEFAULT_PERCENT_OF_DOTS
   @matrix = DEFAULT_MATRIX_RANGE
+  @luminance = LUMINANCE_THRESHOLD
   @with_not_detected_as_white = true
   @with_debug = false
   @with_debug_file = false
   @debug_file_path = DEFAULT_DEBUG_FILE_PATH
 
-  def self.configure(settings)
+  def initialize(settings = {})
+    configure(settings)
+  end
+
+  def configure(settings = {})
     @percent = settings[:percent] || DEFAULT_PERCENT_OF_DOTS
     @matrix = settings[:matrix] || DEFAULT_MATRIX_RANGE
+    @luminance = settings[:luminance] || LUMINANCE_THRESHOLD
     @with_not_detected_as_white = settings[:with_not_detected_as_white] || true
     @with_debug = settings[:with_debug] || false
     @with_debug_file = settings[:with_debug_file] || false
     @debug_file_path = settings[:debug_file_path] || DEFAULT_DEBUG_FILE_PATH
   end
 
-  def self.color(hex)
+  def color(hex)
     @r, @g, @b = hex.match(/^#(..)(..)(..)$/).captures.map(&:hex)
     @colorset = MAXIMUM_COLOR_DEPTH
     dark?
   end
 
-  def self.magick_pixel(pix, x = nil, y = nil)
+  def magick_pixel(pix, x = nil, y = nil)
     @r = pix.red.to_f
     @g = pix.green.to_f
     @b = pix.blue.to_f
@@ -64,14 +70,14 @@ class IsDark
     dark?(x, y)
   end
 
-  def self.magick_pixel_from_blob(x, y, blob)
+  def magick_pixel_from_blob(x, y, blob)
     image = Magick::Image.read(blob).first
     pix = image.pixel_color(x, y)
     magick_pixel(pix, x, y)
   end
 
   # (x, y) is the left corner of an element over a blob, height and width is the element's size
-  def self.magick_area_from_blob(x, y, blob, height, width)
+  def magick_area_from_blob(x, y, blob, height, width)
     image = Magick::Image.read(blob).first
     dark = false
     dots = []
@@ -104,15 +110,16 @@ class IsDark
       p '=================================================================================='
       p "Total Points: #{dots.length}, dark points amount:#{points}"
       p "Is \"invert to white not detectd pixels\" option enabled?:#{@with_not_detected_as_white}"
-      p "Signature will be inverted if #{@percent}% of dots will be dark"
-      p "Is inverted?: #{dark}"
+      p "Percent of dark dots in the matrix: #{@percent}%"
+      p "Luminance value is: #{@luminance}"
+      p "Is Area Dark?: #{dark}"
       p "have a look on #{@debug_file_path} file to see your tested area of a blob"
       p '=================================================================================='
     end
     dark
   end
 
-  def self.draw_debug_files(image, x, y, old_x, old_y)
+  def draw_debug_files(image, x, y, old_x, old_y)
     return unless old_x && old_y
 
     gc = Magick::Draw.new
@@ -123,7 +130,7 @@ class IsDark
   end
 
   # detects a dark color based on luminance W3 standarts ( https://www.w3.org/TR/WCAG20/#relativeluminancedef )
-  def self.dark?(x = nil, y = nil)
+  def dark?(x = nil, y = nil)
     dark = false
     inverted = false
     pixel = [@r.to_f, @g.to_f, @b.to_f]
@@ -146,7 +153,7 @@ class IsDark
     l = (RED_LUMINANCE_COEFFICIENT * calculated[0]) +
         (GREEN_LUMINANCE_COEFFICIENT * calculated[1]) +
         (BLUE_LUMINANCE_COEFFICIENT * calculated[2])
-    dark = true if l <= LUMINANCE_THRESHOLD
+    dark = true if l <= @luminance
     if @with_debug
       debug = { X: x, Y: y, R: @r, G: @g, B: @b, 'luminance value': l, dark?: dark,
                 'inverted to white': inverted }

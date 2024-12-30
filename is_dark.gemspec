@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name        = 'is_dark'
-  s.version     = '0.1.9'
+  s.version     = '0.2.0'
   s.summary     = 'Detects a dark background under an area or by a color code'
   s.description = 'Detects a dark color based on luminance W3 standarts ' \
                   "( https://www.w3.org/TR/WCAG20/#relativeluminancedef ). \n\n " \
@@ -21,7 +21,6 @@ Gem::Specification.new do |s|
                     'rubygems_mfa_required' => 'true' }
   s.required_ruby_version = '>= 2.7.0'
   s.add_dependency 'rmagick', '~> 5.2'
-  s.add_development_dependency 'minitest', '~> 5.16'
   s.add_development_dependency 'rspec', '~> 3.13'
   s.add_development_dependency 'rubocop', '~> 1.69'
 end
