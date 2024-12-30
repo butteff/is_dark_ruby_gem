@@ -1,7 +1,7 @@
 # is_dark Ruby Gem
 Ruby Gem to detect a dark color over an area from a blob of a file or by a color hex code based on [luminance w3 standarts]( https://www.w3.org/TR/WCAG20/#relativeluminancedef "luminance w3 standarts") 
 
-https://github.com/user-attachments/assets/b5c46ae5-b608-4588-a497-b3bd3eb690ef
+https://github.com/user-attachments/assets/430cd789-1b5d-42a0-ae6e-c8b5f1da694b
 
 #### Can detect: 
 * is a hex color dark
@@ -14,7 +14,7 @@ An example practical aspect: it can be useful to understand will a black colored
 #### How to Install:
 
 Gemfile: 
-`gem 'is_dark', '~> 0.1.7'`
+`gem 'is_dark', '~> 0.1.9'`
 
 Install: 
 `gem install is_dark`
@@ -35,19 +35,21 @@ Install:
 5. is Imagick area from a blob dark (by coordinates of a dot + width and height from the dot):
 `IsDark.magick_area_from_blob(x, y, blob, height, width)` #standart default settings
 
-#### More examples:
-It also has kind of a development mode, when you can generate a debug outputs of all the generated dots based on provided coordinates. It can draw a test area over the file if you want, so you always can be sure, that you have valid coordinates on your tests.
-- `IsDark.set_debug_data(true, false)` #with debug info outputs in logs
+#### Settings:
+It also has kind of a development mode, when you can generate a debug outputs of all the generated dots based on provided coordinates. It can draw a test area over the file if you want, so you always can be sure, that you have valid coordinates on your tests. You can also set some other values and calibrate results as you need.
 
-- `IsDark.set_debug_data(true, '/var/www/project/is_dark_debug_output.pdf')` #with a generated debug  pdf file (has displayed area of the analytics). You can use other file formats for the info (jpg, png, gif)
-
-- `IsDark.magick_area_from_blob(x, y, blob, height, width)` #standart default settings
-
--   ` IsDark.magick_area_from_blob(x, y, blob, cf_height, cf_width, 60, (1..10))` #additional settings (percent of dark dots amount to mark an area as a dark, range of matrix to build dots 1..10 - means 10x10; 0..10 - will have 121 dots for the analytics)
-
-Sometimes Imagick can't detect a pixel or it has no color, so it detects it as (RGB: 0,0,0), the gem has an option to consider pixels like this as "white", but if you need to disable this option add true or false at the end of the method:
-
--  ` IsDark.magick_area_from_blob(x, y, blob, cf_height, cf_width, 60, (1..10), false)` #detection "as white" is disabled)
+```ruby
+IsDark.configure({
+    percent: 70, #percent of dark dots under an area to mark all the area as dark
+    matrix: (0..10), #range of dots to analyse. (0..10) means matrix 10x10 or 100 dots to analyse
+    with_not_detected_as_white: true, # Sometimes Imagick can't detect a pixel or it has no color, so it detects it as (RGB: 0,0,0), the gem has an option to consider pixels like this as "white", but if you need to disable this option add true or false
+    with_debug: true, #show debug output
+    with_debug_file: true, #draw a tested area in a copy of your blob file
+    debug_file_path: debug_file_path #path of the file with a drawn area
+})
+```
+You can use these settings and test it after with this command:
+`IsDark.magick_area_from_blob(x, y, blob, height, width)`, so it will show a debug info with a generated file
 
 #### Unit Tests:
 
