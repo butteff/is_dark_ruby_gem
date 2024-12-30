@@ -1,9 +1,7 @@
-source "https://rubygems.org"
-git_source(:github) { |repo| "https://github.com/butteff/is_dark_ruby_gem.git" }
+# frozen_string_literal: true
 
-gem "rmagick"
+source 'https://rubygems.org'
+git_source(:github) { |_repo| 'https://github.com/butteff/is_dark_ruby_gem.git' }
 
-group  :development, :test do
-  gem "rspec"
-  gem "minitest"
-end
+# Specify your gem's dependencies in scenic.gemspec
+gemspec

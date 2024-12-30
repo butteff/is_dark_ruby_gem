@@ -1,6 +1,17 @@
 # frozen_string_literal: true
 
 require 'rmagick'
+
+# The `Is Dark` class is designed to determine whether a given color or pixel is dark based on luminance
+# standards defined by the W3C. It utilizes the `rmagick` library to handle image processing tasks.
+# The class includes methods to analyze colors from hexadecimal values, individual pixels,
+# and areas within images blobs. It also supports debugging features to visualize the analysis process.
+#
+# Key features include:
+# - **Color Analysis**: Determines if a color is dark based on its luminance.
+# - **- **Pixel Analysis**: Analysis individual pixels from an image.
+# - **Area Analysis**: Evaluates the darkness of a specified area within an image blob.
+# - **Debugging**: Provides options to enable debugging information and visualize the analysis on a PDF file.
 class IsDark
   BLUE_LUMINANCE_COEFFICIENT = 0.0722
   GREEN_LUMINANCE_COEFFICIENT = 0.7152
@@ -27,7 +38,7 @@ class IsDark
   def self.color(hex)
     @r, @g, @b = hex.match(/^#(..)(..)(..)$/).captures.map(&:hex)
     @colorset = MAXIMUM_COLOR_DEPTH
-    is_dark
+    dark?
   end
 
   def self.magick_pixel(pix, x = nil, y = nil, set_not_detected_light = true)
@@ -35,7 +46,7 @@ class IsDark
     @g = pix.green.to_f
     @b = pix.blue.to_f
     @colorset = MAX_COLOR_VALUE
-    is_dark(x, y, set_not_detected_light)
+    dark?(x, y, set_not_detected_light)
   end
 
   def self.magick_pixel_from_blob(x, y, blob, _set_not_detected_light = true)
@@ -45,14 +56,16 @@ class IsDark
   end
 
   # (x, y) is the left corner of an element over a blob, height and width is the element's size
-  def self.magick_area_from_blob(x, y, blob, height, width, percent = 80, range = (0..10), set_not_detected_light = true)
+  def self.magick_area_from_blob(
+    x, y, blob, height, width, percent = 80, range = (0..10), set_not_detected_light = true
+  )
     @set_not_detected_light = set_not_detected_light
     image = Magick::Image.read(blob).first
     dark = false
     dots = []
     range.each do |xx|
       range.each do |yy|
-        dots << { 'x': (x + width * xx / 10).to_i, 'y': (y + height * yy / 10).to_i }
+        dots << { x: (x + (width * xx / 10)).to_i, y: (y + (height * yy / 10)).to_i }
       end
     end
 
@@ -106,11 +119,12 @@ class IsDark
   end
 
   # detects a dark color based on luminance W3 standarts ( https://www.w3.org/TR/WCAG20/#relativeluminancedef )
-  def self.is_dark(x = nil, y = nil, set_not_detected_light = true)
+  def self.dark?(x = nil, y = nil, set_not_detected_light = true)
     dark = false
     inverted = false
     pixel = [@r.to_f, @g.to_f, @b.to_f]
-    return true if pixel == [0.00, 0.00, 0.00] #hardcoded exception
+    return true if pixel == [0.00, 0.00, 0.00] # hardcoded exception
+
     # probably not detected pixel color by Imagick, will be considered as "white" if "set_not_detected_light = true"
     if set_not_detected_light && pixel[0] == 0.0 && pixel[1] == 0.0 && pixel[2] == 0.0
       pixel = [MAXIMUM_COLOR_DEPTH, MAXIMUM_COLOR_DEPTH, MAXIMUM_COLOR_DEPTH]
@@ -126,12 +140,12 @@ class IsDark
       end
       calculated << color
     end
-    l = RED_LUMINANCE_COEFFICIENT * calculated[0] +
-        GREEN_LUMINANCE_COEFFICIENT * calculated[1] +
-        BLUE_LUMINANCE_COEFFICIENT * calculated[2]
+    l = (RED_LUMINANCE_COEFFICIENT * calculated[0]) +
+        (GREEN_LUMINANCE_COEFFICIENT * calculated[1]) +
+        (BLUE_LUMINANCE_COEFFICIENT * calculated[2])
     dark = true if l <= LUMINANCE_THRESHOLD
     if @with_debug
-      debug = { 'X': x, 'Y': y, 'R': @r, 'G': @g, 'B': @b, 'luminance value': l, 'is_dark': dark,
+      debug = { X: x, Y: y, R: @r, G: @g, B: @b, 'luminance value': l, dark?: dark,
                 'inverted to white': inverted }
       p debug
     end
