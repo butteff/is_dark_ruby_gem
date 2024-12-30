@@ -110,7 +110,8 @@ class IsDark
     dark = false
     inverted = false
     pixel = [@r.to_f, @g.to_f, @b.to_f]
-    return true if pixel == [0.00, 0.00, 0.00] #hardcoded exception
+    return true if pixel == [0.00, 0.00, 0.00] # hardcoded exception
+
     # probably not detected pixel color by Imagick, will be considered as "white" if "set_not_detected_light = true"
     if set_not_detected_light && pixel[0] == 0.0 && pixel[1] == 0.0 && pixel[2] == 0.0
       pixel = [MAXIMUM_COLOR_DEPTH, MAXIMUM_COLOR_DEPTH, MAXIMUM_COLOR_DEPTH]

@@ -1,10 +1,12 @@
-source "https://rubygems.org"
-git_source(:github) { |repo| "https://github.com/butteff/is_dark_ruby_gem.git" }
+# frozen_string_literal: true
 
-gem "rmagick"
+source 'https://rubygems.org'
+git_source(:github) { |_repo| 'https://github.com/butteff/is_dark_ruby_gem.git' }
 
-group  :development, :test do
-  gem "rspec"
-  gem "rubocop", require: false
-  gem "minitest"
+gem 'rmagick'
+
+group :development, :test do
+  gem 'minitest'
+  gem 'rspec'
+  gem 'rubocop', require: false
 end
