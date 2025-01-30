@@ -107,13 +107,15 @@ class IsDark
     end
     dark = true if points >= (dots.length / 100) * @percent
     if @with_debug
+      percent_calculated = points/(dots.length / 100)
       p '=================================================================================='
       p "Total Points: #{dots.length}, dark points amount:#{points}"
       p "Is \"invert to white not detectd pixels\" option enabled?:#{@with_not_detected_as_white}"
-      p "Percent of dark dots in the matrix: #{@percent}%"
+      p "Percent of dark dots in the matrix: #{percent_calculated}%"
+      p "Percent to consider as a dark area from settings: #{@percent}%"
       p "Luminance value is: #{@luminance}"
       p "Is Area Dark?: #{dark}"
-      p "have a look on #{@debug_file_path} file to see your tested area of a blob"
+      p "have a look on #{@debug_file_path} file to see your tested area of a blob" if @with_debug_file
       p '=================================================================================='
     end
     dark
