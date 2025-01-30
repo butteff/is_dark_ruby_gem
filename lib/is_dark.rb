@@ -83,7 +83,7 @@ class IsDark
     dots = []
     @matrix.each do |xx|
       @matrix.each do |yy|
-        dots << { x: (x + (width * xx / 10)).to_i, y: (y + (height * yy / 10)).to_i }
+        dots << { x: (x + (width * xx / @matrix.count)).to_i, y: (y + (height * yy / @matrix.count)).to_i }
       end
     end
 
