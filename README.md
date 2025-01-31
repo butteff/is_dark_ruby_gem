@@ -14,7 +14,7 @@ An example practical aspect: it can be useful to understand will a black colored
 #### How to Install:
 
 Gemfile: 
-`gem 'is_dark', '~> 0.2.0'`
+`gem 'is_dark'
 
 Install: 
 `gem install is_dark`
