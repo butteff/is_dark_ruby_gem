@@ -107,7 +107,7 @@ class IsDark
     end
     dark = true if points >= (dots.length / 100) * @percent
     if @with_debug
-      percent_calculated = points/(dots.length / 100)
+      percent_calculated = points / (dots.length / 100)
       p '=================================================================================='
       p "Total Points: #{dots.length}, dark points amount:#{points}"
       p "Is \"invert to white not detectd pixels\" option enabled?:#{@with_not_detected_as_white}"
